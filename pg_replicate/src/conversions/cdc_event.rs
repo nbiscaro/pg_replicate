@@ -89,10 +89,14 @@ impl CdcEventConverter {
         column_schemas: &[ColumnSchema],
         update_body: UpdateBody,
     ) -> Result<CdcEvent, CdcEventConversionError> {
-        let row =
+        let old_row = update_body
+            .old_tuple()
+            .map(|tuple| Self::try_from_tuple_data_slice(column_schemas, tuple.tuple_data()))
+            .transpose()?;
+        let new_row =
             Self::try_from_tuple_data_slice(column_schemas, update_body.new_tuple().tuple_data())?;
 
-        Ok(CdcEvent::Update((table_id, row)))
+        Ok(CdcEvent::Update((table_id, old_row, new_row)))
     }
 
     fn try_from_delete_body(
@@ -179,7 +183,7 @@ pub enum CdcEvent {
     Begin(BeginBody),
     Commit(CommitBody),
     Insert((TableId, TableRow)),
-    Update((TableId, TableRow)),
+    Update((TableId, Option<TableRow>, TableRow)),
     Delete((TableId, TableRow)),
     Relation(RelationBody),
     Type(TypeBody),
