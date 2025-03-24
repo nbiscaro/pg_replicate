@@ -47,4 +47,9 @@ impl TableSchema {
     pub fn has_primary_keys(&self) -> bool {
         self.column_schemas.iter().any(|cs| cs.primary)
     }
+
+    /// For replica identity 'full', any table with columns is identifiable
+    pub fn has_identifying_columns(&self) -> bool {
+        self.has_primary_keys() || !self.column_schemas.is_empty()
+    }
 }
