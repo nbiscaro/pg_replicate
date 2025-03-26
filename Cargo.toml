@@ -2,7 +2,7 @@
 
 resolver = "2"
 
-members = ["api", "pg_replicate", "replicator"]
+members = ["pg_replicate"]
 
 [workspace.dependencies]
 actix-web = { version = "4", default-features = false }
