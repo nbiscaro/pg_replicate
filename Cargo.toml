@@ -47,10 +47,7 @@ tracing-subscriber = { version = "0.3", features = [
 ] }
 
 [features]
-bigquery = ["dep:gcp-bigquery-client", "dep:prost"]
-duckdb = ["dep:duckdb"]
 stdout = []
-delta = ["dep:deltalake"]
 # When enabled converts unknown types to bytes
 unknown_types_to_bytes = []
 default = ["unknown_types_to_bytes"]
